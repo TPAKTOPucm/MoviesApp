@@ -9,6 +9,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
+using MoviesApp.Filters;
 
 namespace MoviesApp.Controllers {
 	public class ActorController : Controller {
@@ -39,6 +40,7 @@ namespace MoviesApp.Controllers {
 		// POST: ActorController/Create
 		[HttpPost]
 		[ValidateAntiForgeryToken]
+		[AgeFilter]
 		public ActionResult Create(InputMovieViewModel inputModel) {
 			if (ModelState.IsValid) {
 				_context.Add(_mapper.Map<Actor>(inputModel));
@@ -59,6 +61,7 @@ namespace MoviesApp.Controllers {
 		// POST: ActorController/Edit/5
 		[HttpPost]
 		[ValidateAntiForgeryToken]
+		[AgeFilter]
 		public ActionResult Edit(int id, EditActorViewModel editModel) {
 			if (ModelState.IsValid) {
 				var actor = _mapper.Map<Actor>(editModel);
