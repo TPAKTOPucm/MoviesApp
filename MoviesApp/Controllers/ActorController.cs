@@ -11,29 +11,35 @@ using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using MoviesApp.Filters;
 
-namespace MoviesApp.Controllers {
-	public class ActorController : Controller {
+namespace MoviesApp.Controllers 
+{
+	public class ActorController : Controller
+	{
 
 		private readonly MoviesContext _context;
 		private IMapper _mapper;
 
-		public ActorController(MoviesContext context, IMapper mapper) {
+		public ActorController(MoviesContext context, IMapper mapper)
+		{
 			_context = context;
 			_mapper = mapper;
 		}
 
 		// GET: ActorController
-		public ActionResult Index() {
+		public ActionResult Index() 
+		{
 			return View(_mapper.Map<List<ActorViewModel>>(_context.Actors.ToList()));
 		}
 
 		// GET: ActorController/Details/5
-		public ActionResult Details(int id) {
+		public ActionResult Details(int id) 
+		{
 			return View(_mapper.Map<ActorViewModel>(_context.Actors.Find(id)));
 		}
 
 		// GET: ActorController/Create
-		public ActionResult Create() {
+		public ActionResult Create() 
+		{
 			return View();
 		}
 
@@ -41,8 +47,10 @@ namespace MoviesApp.Controllers {
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		[AgeFilter]
-		public ActionResult Create(InputMovieViewModel inputModel) {
-			if (ModelState.IsValid) {
+		public ActionResult Create(InputMovieViewModel inputModel) 
+		{
+			if (ModelState.IsValid)
+			{
 				_context.Add(_mapper.Map<Actor>(inputModel));
 				_context.SaveChanges();
 				return RedirectToAction(nameof(Index));
@@ -62,15 +70,19 @@ namespace MoviesApp.Controllers {
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		[AgeFilter]
-		public ActionResult Edit(int id, EditActorViewModel editModel) {
-			if (ModelState.IsValid) {
+		public ActionResult Edit(int id, EditActorViewModel editModel)
+		{
+			if (ModelState.IsValid)
+			{
 				var actor = _mapper.Map<Actor>(editModel);
 				actor.Id = id;
-				if (_context.Actors.Any(a => a.Id == id)) {
+				if (_context.Actors.Any(a => a.Id == id))
+				{
 					_context.Update(actor);
 					_context.SaveChanges();
 					return RedirectToAction(nameof(Index));
-				} else {
+				} else 
+				{
 					return NotFound();
 				}
 			}
@@ -78,7 +90,8 @@ namespace MoviesApp.Controllers {
 		}
 
 		// GET: ActorController/Delete/5
-		public ActionResult Delete(int id) {
+		public ActionResult Delete(int id)
+		{
 			var deleteModel = _mapper.Map<DeleteActorViewModel>(_context.Actors.Find(id));
 			if (deleteModel == null)
 				return NotFound();
@@ -88,7 +101,8 @@ namespace MoviesApp.Controllers {
 		// POST: ActorController/Delete/5
 		[HttpPost, ActionName("Delete")]
 		[ValidateAntiForgeryToken]
-		public IActionResult DeleteConfirmed(int id) {
+		public IActionResult DeleteConfirmed(int id)
+		{
 			var movie = _context.Movies.Find(id);
 			_context.Movies.Remove(movie);
 			_context.SaveChanges();

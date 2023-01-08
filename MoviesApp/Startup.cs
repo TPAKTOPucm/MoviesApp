@@ -32,8 +32,7 @@ namespace MoviesApp
         {
             services.AddControllersWithViews();
 
-            services.AddDbContext<MoviesContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("MoviesContext")));
+            services.AddDbContext<MoviesContext>(options => options.UseSqlServer(Configuration.GetConnectionString("MoviesContext")));
 
 			services.AddAutoMapper(typeof(Startup));
 		}

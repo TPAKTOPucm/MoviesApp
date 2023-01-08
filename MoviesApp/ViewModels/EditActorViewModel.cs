@@ -1,4 +1,6 @@
-﻿namespace MoviesApp.ViewModels {
-	public class EditActorViewModel :InputActorViewModel {
+﻿namespace MoviesApp.ViewModels
+{
+	public class EditActorViewModel :InputActorViewModel
+	{
 	}
 }
