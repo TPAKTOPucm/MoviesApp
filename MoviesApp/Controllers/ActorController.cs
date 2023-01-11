@@ -10,57 +10,74 @@ using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using MoviesApp.Filters;
+using MoviesApp.Services;
+using Microsoft.AspNetCore.Components.Web;
+using MoviesApp.Services.Dto;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MoviesApp.Controllers 
 {
 	public class ActorController : Controller
 	{
+		private readonly IMapper _mapper;
+		private readonly IActorService _service;
 
-		private readonly MoviesContext _context;
-		private IMapper _mapper;
-
-		public ActorController(MoviesContext context, IMapper mapper)
+		public ActorController(IMapper mapper, IActorService service)
 		{
-			_context = context;
+			_service = service;
 			_mapper = mapper;
 		}
 
 		// GET: ActorController
-		public ActionResult Index() 
+		[HttpGet]
+		[Authorize]
+		public ActionResult Index()
 		{
-			return View(_mapper.Map<List<ActorViewModel>>(_context.Actors.ToList()));
+			var actors = _mapper.Map<IEnumerable<ActorDto>, IEnumerable<ActorViewModel>>(_service.GetAllActors());
+			return View(actors);
 		}
 
 		// GET: ActorController/Details/5
-		public ActionResult Details(int id) 
+		[HttpGet]
+		[Authorize]
+		public ActionResult Details(int id)
 		{
-			return View(_mapper.Map<ActorViewModel>(_context.Actors.Find(id)));
+			var actor = _mapper.Map<ActorViewModel>(_service.GetActor(id));
+			if (actor == null)
+			{
+				return NotFound();
+			}
+			return View(actor);
 		}
 
 		// GET: ActorController/Create
-		public ActionResult Create() 
+		[HttpGet]
+		[Authorize(Roles = "Admin")]
+		public ActionResult Create()
 		{
 			return View();
 		}
 
 		// POST: ActorController/Create
 		[HttpPost]
+		[Authorize(Roles = "Admin")]
 		[ValidateAntiForgeryToken]
 		[AgeFilter]
-		public ActionResult Create(InputMovieViewModel inputModel) 
+		public ActionResult Create([Bind("FirstName,LastName,Birthday")] InputMovieViewModel inputModel) 
 		{
 			if (ModelState.IsValid)
 			{
-				_context.Add(_mapper.Map<Actor>(inputModel));
-				_context.SaveChanges();
+				_service.AddActor(_mapper.Map<ActorDto>(inputModel));
 				return RedirectToAction(nameof(Index));
 			}
 			return View(inputModel);
 		}
 
 		// GET: ActorController/Edit/5
+		[HttpGet]
+		[Authorize(Roles = "Admin")]
 		public ActionResult Edit(int id) {
-			var actor = _mapper.Map<EditActorViewModel>(_context.Actors.Find(id));
+			var actor = _mapper.Map<EditActorViewModel>(_service.GetActor(id));
 			if (actor == null)
 				return NotFound();
 			return View(actor);
@@ -68,31 +85,29 @@ namespace MoviesApp.Controllers
 
 		// POST: ActorController/Edit/5
 		[HttpPost]
+		[Authorize(Roles = "Admin")]
 		[ValidateAntiForgeryToken]
 		[AgeFilter]
-		public ActionResult Edit(int id, EditActorViewModel editModel)
+		public ActionResult Edit(int id,[Bind("FirstName,LastName,Birthday")] EditActorViewModel editModel)
 		{
 			if (ModelState.IsValid)
 			{
-				var actor = _mapper.Map<Actor>(editModel);
+				ActorDto actor = _mapper.Map<ActorDto>(editModel);
 				actor.Id = id;
-				if (_context.Actors.Any(a => a.Id == id))
-				{
-					_context.Update(actor);
-					_context.SaveChanges();
-					return RedirectToAction(nameof(Index));
-				} else 
-				{
+				actor = _service.UpdateActor(actor);
+				if (actor == null)
 					return NotFound();
-				}
+				return RedirectToAction(nameof(Index));
 			}
 			return View(editModel);
 		}
 
 		// GET: ActorController/Delete/5
+		[HttpGet]
+		[Authorize(Roles = "Admin")]
 		public ActionResult Delete(int id)
 		{
-			var deleteModel = _mapper.Map<DeleteActorViewModel>(_context.Actors.Find(id));
+			var deleteModel = _mapper.Map<DeleteActorViewModel>(_service.GetActor(id));
 			if (deleteModel == null)
 				return NotFound();
 			return View(deleteModel);
@@ -100,12 +115,13 @@ namespace MoviesApp.Controllers
 
 		// POST: ActorController/Delete/5
 		[HttpPost, ActionName("Delete")]
+		[Authorize(Roles = "Admin")]
 		[ValidateAntiForgeryToken]
 		public IActionResult DeleteConfirmed(int id)
 		{
-			var movie = _context.Movies.Find(id);
-			_context.Movies.Remove(movie);
-			_context.SaveChanges();
+			var actor = _service.DeleteActor(id);
+			if (actor == null)
+				return NotFound();
 			return RedirectToAction(nameof(Index));
 		}
 	}

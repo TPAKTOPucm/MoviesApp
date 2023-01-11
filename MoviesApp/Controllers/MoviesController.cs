@@ -81,12 +81,8 @@ namespace MoviesApp.Controllers
         [HttpGet]
         [Authorize(Roles = "Admin")] 
         // GET: Movies/Edit/5
-        public IActionResult Edit(int? id)
+        public IActionResult Edit(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
 
             var editModel = _mapper.Map<EditMovieViewModel>(_service.GetMovie((int) id));
             
@@ -127,12 +123,8 @@ namespace MoviesApp.Controllers
         [HttpGet]
         [Authorize(Roles = "Admin")] 
         // GET: Movies/Delete/5
-        public IActionResult Delete(int? id)
+        public IActionResult Delete(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
 
             var deleteModel = _mapper.Map<DeleteMovieViewModel>(_service.GetMovie((int) id));
             
