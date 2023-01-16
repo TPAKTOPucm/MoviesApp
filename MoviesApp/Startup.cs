@@ -57,7 +57,7 @@ namespace MoviesApp
         {
             if (env.IsDevelopment())
             {
-                app.UseRequestLog();
+                app.UseActorsRequestLog();
                 app.UseDeveloperExceptionPage();
             }
 
