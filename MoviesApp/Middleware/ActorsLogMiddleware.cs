@@ -15,7 +15,8 @@ namespace MoviesApp.Middleware
         { 
             if (context.Request.Path == "/Actors")
             {
-                logger.LogTrace($"Request: {context.Request.Path}  Method: {context.Request.Method}");
+                logger.LogTrace("Path: " + context.Request.Path + " Method: "+context.Request.Method);
+                logger.LogDebug("Session ID: " + context.Session.Id + " Query: " + context.Request.Query + " Body: " + context.Request.Body);
             }
             await _next(context);
         }
