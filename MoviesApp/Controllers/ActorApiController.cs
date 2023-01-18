@@ -36,14 +36,14 @@ namespace MoviesApp.Controllers
         }
 
         [HttpPost] // POST: api/actors
-        public ActionResult<ActorDto> PostMovie(ActorDto inputDto)
+        public ActionResult<ActorDto> PostActor(ActorDto inputDto)
         {
             var actor = _service.AddActor(inputDto);
             return CreatedAtAction("GetById", new { id = actor.Id }, actor);
         }
 
         [HttpPut("{id}")] // PUT: api/actors/5
-        public IActionResult UpdateMovie(int id, ActorDto editDto)
+        public IActionResult UpdateActor(int id, ActorDto editDto)
         {
             var actor = _service.UpdateActor(editDto);
 
@@ -56,7 +56,7 @@ namespace MoviesApp.Controllers
         }
 
         [HttpDelete("{id}")] // DELETE: api/actors/5
-        public ActionResult<ActorDto> DeleteMovie(int id)
+        public ActionResult<ActorDto> DeleteActor(int id)
         {
             var actor = _service.DeleteActor(id);
             if (actor == null)
