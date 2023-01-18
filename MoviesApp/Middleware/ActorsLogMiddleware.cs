@@ -13,7 +13,7 @@ namespace MoviesApp.Middleware
         }
         public async Task Invoke(HttpContext context, ILogger logger)
         { 
-            if (context.Request.Path == "/Actors")
+            if (context.Request.Path == "/Actor")
             {
                 logger.LogTrace("Path: " + context.Request.Path + " Method: "+context.Request.Method);
                 logger.LogDebug("Session ID: " + context.Session.Id + " Query: " + context.Request.Query + " Body: " + context.Request.Body);

@@ -63,7 +63,7 @@ namespace MoviesApp.Controllers
 		[Authorize(Roles = "Admin")]
 		[ValidateAntiForgeryToken]
 		[AgeFilter]
-		public ActionResult Create([Bind("FirstName,LastName,Birthday")] InputMovieViewModel inputModel) 
+		public ActionResult Create([Bind("FirstName,LastName,Birthday")] InputActorViewModel inputModel) 
 		{
 			if (ModelState.IsValid)
 			{

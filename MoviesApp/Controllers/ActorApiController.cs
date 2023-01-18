@@ -17,7 +17,7 @@ namespace MoviesApp.Controllers
         }
 
         [HttpGet] // GET: /api/actors
-        [ProducesResponseType(200, Type = typeof(IEnumerable<MovieDto>))]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<ActorDto>))]
         [ProducesResponseType(404)]
         public ActionResult<IEnumerable<ActorDto>> GetActors()
         {
@@ -25,7 +25,7 @@ namespace MoviesApp.Controllers
         }
 
         [HttpGet("{id}")] // GET: /api/actors/5
-        [ProducesResponseType(200, Type = typeof(MovieDto))]
+        [ProducesResponseType(200, Type = typeof(ActorDto))]
         [ProducesResponseType(404)]
         public IActionResult GetById(int id)
         {
@@ -36,7 +36,7 @@ namespace MoviesApp.Controllers
         }
 
         [HttpPost] // POST: api/actors
-        public ActionResult<MovieDto> PostMovie(ActorDto inputDto)
+        public ActionResult<ActorDto> PostMovie(ActorDto inputDto)
         {
             var actor = _service.AddActor(inputDto);
             return CreatedAtAction("GetById", new { id = actor.Id }, actor);
@@ -56,7 +56,7 @@ namespace MoviesApp.Controllers
         }
 
         [HttpDelete("{id}")] // DELETE: api/actors/5
-        public ActionResult<MovieDto> DeleteMovie(int id)
+        public ActionResult<ActorDto> DeleteMovie(int id)
         {
             var actor = _service.DeleteActor(id);
             if (actor == null)
