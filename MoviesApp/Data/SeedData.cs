@@ -71,6 +71,7 @@ namespace MoviesApp.Data
                             BirthDay = new DateTime(1980, 3, 22)
                         }
                         );
+                    context.SaveChanges()
                 }
                 var userManager = serviceProvider.GetService<UserManager<ApplicationUser>>();
                 var roleManager = serviceProvider.GetService<RoleManager<IdentityRole>>();
